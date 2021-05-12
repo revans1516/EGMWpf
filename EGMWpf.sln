@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EGMWpf", "EGMWpf\EGMWpf.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenVRApiModule", "OpenVRApiModule\OpenVRApiModule\OpenVRApiModule.csproj", "{A963E910-9A47-4160-B3AB-004B8E80D034}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EGM_6_10", "..\EGMSol-master\EGM_6_10\EGM_6_10.csproj", "{7D6F5464-D218-4ACE-AC1A-A89BAE75A1A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EGM_6_10", "EGM_6_10\EGM_6_10.csproj", "{7D6F5464-D218-4ACE-AC1A-A89BAE75A1A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

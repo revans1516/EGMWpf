@@ -170,10 +170,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\EGMSol-master\EGM_6_10\EGM_6_10.csproj">
-      <Project>{7d6f5464-d218-4ace-ac1a-a89bae75a1a3}</Project>
-      <Name>EGM_6_10</Name>
-    </ProjectReference>
     <ProjectReference Include="..\OpenVRApiModule\OpenVRApiModule\OpenVRApiModule.csproj">
       <Project>{a963e910-9a47-4160-b3ab-004b8e80d034}</Project>
       <Name>OpenVRApiModule</Name>
