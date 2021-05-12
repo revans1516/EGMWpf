@@ -1,0 +1,158 @@
+﻿<Window x:Class="EGMWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EGMWpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="640" Width="960" Closing="Window_Closed" WindowState="Normal">
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <GroupBox Header="Robot Information" Grid.Row="0" Grid.Column="0" BorderBrush="Black">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Grid.Column="0" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Selected Robot:" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="cboFoundControllers" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding FoundControllers}" SelectionChanged="CboFoundControllers_SelectionChanged"/>
+                        <Label Content="Connection State: " Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <Label Content="{Binding RobotConnected}" Grid.Row="1" Grid.Column="1" Background="{Binding RobotConnectionBrush }"  HorizontalAlignment="Center" FlowDirection="RightToLeft" VerticalAlignment="Center"/>
+                        <Label Content="Operation Mode: " Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <Label Content="{Binding RobotOperatingMode}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Label Content="Controller State: " Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <Label Content="{Binding RobotControllerState}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Grid>
+
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="VR Connection Information" Grid.Row="1" Grid.Column="0" BorderBrush="Black">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="6*"/>
+                        <RowDefinition Height="4*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width=".35*"/>
+                            <ColumnDefinition Width=".35*"/>
+                            <ColumnDefinition Width=".3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height=".2*"/>
+                            <RowDefinition Height=".8*"/>
+
+                        </Grid.RowDefinitions>
+                        <Label Content="Headset Connection Error:" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <Label Content="{Binding VRInitializeError}" Grid.Row="0" Grid.Column="1" Background="{Binding VRConnectionBrush }"  HorizontalAlignment="Center" FlowDirection="RightToLeft" VerticalAlignment="Center"/>
+                        <Button x:Name="btnStartStreaming" Content="Start Streaming" Grid.Column="2" Grid.Row="0" Margin="5" Click="btnStartStreaming_Click"/>
+                        <GroupBox Header="VR Controller Information" Grid.Row="1" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+
+                                </Grid.ColumnDefinitions>
+                                <GroupBox Grid.Row="0" Header="Controller 1" Grid.RowSpan="3" Grid.Column="0">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="3*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="3*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Grid.Row="0" Grid.Column="0" Content="X: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="0" Grid.Column="1" Content="{Binding VRControllerPosition.X}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                        <Label Grid.Row="0" Grid.Column="2" Content="RX: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="0" Grid.Column="3" Content="{Binding VRControllerRotation.X}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+                                        <Label Grid.Row="1" Grid.Column="0"  Content="Y: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="1" Grid.Column="1"  Content="{Binding VRControllerPosition.Y}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
+                                        <Label Grid.Row="1" Grid.Column="2"  Content="RY: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="1" Grid.Column="3"  Content="{Binding VRControllerRotation.Y}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
+
+                                        <Label Grid.Row="2" Grid.Column="0"  Content="Z: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="2" Grid.Column="1" Content="{Binding VRControllerPosition.Z}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
+                                        <Label Grid.Row="2" Grid.Column="2" Content="RZ: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="2" Grid.Column="3" Content="{Binding VRControllerRotation.Z}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
+
+                                    </Grid>
+
+                                </GroupBox>
+                                <GroupBox Grid.Row="0" Header="Controller 2" Grid.RowSpan="3" Grid.Column="1">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="3*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="3*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Grid.Row="0" Grid.Column="0" Content="X: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="0" Grid.Column="1" Content="{Binding VRControllerPosition2.X}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
+                                        <Label Grid.Row="0" Grid.Column="2" Content="RX: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="0" Grid.Column="3" Content="{Binding VRControllerRotation2.X}" HorizontalAlignment="Left" VerticalAlignment="Center" HorizontalContentAlignment="Left" />
+
+                                        <Label Grid.Row="1" Grid.Column="0"  Content="Y: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="1" Grid.Column="1"  Content="{Binding VRControllerPosition2.Y}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
+                                        <Label Grid.Row="1" Grid.Column="2"  Content="RY: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="1" Grid.Column="3"  Content="{Binding VRControllerRotation2.Y}" HorizontalAlignment="Left" VerticalAlignment="Center" HorizontalContentAlignment="Left" />
+
+                                        <Label Grid.Row="2" Grid.Column="0"  Content="Z: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="2" Grid.Column="1" Content="{Binding VRControllerPosition2.Z}" HorizontalAlignment="Left" VerticalAlignment="Center" HorizontalContentAlignment="Left" />
+                                        <Label Grid.Row="2" Grid.Column="2" Content="RZ: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="2" Grid.Column="3" Content="{Binding VRControllerRotation2.Z}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left" />
+
+                                    </Grid>
+
+                                </GroupBox>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+
+                </Grid>
+            </GroupBox>
+        </Grid>
+
+    </Grid>
+</Window>
