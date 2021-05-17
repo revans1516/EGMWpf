@@ -41,7 +41,7 @@ namespace EGM_6_10
 
 
         public double[] CurrentPose = { 0, 0, 0, 1, 0, 0, 0 };
-
+        
 
         public UInt64 RobotTime
         {
@@ -269,6 +269,7 @@ namespace EGM_6_10
             robot.FeedBack.Cartesian.Orient.U1,
             robot.FeedBack.Cartesian.Orient.U2,
             robot.FeedBack.Cartesian.Orient.U3};
+            
             RobotTime = robot.FeedBack.Time.Usec;
 
 

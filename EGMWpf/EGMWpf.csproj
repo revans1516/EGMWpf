@@ -97,11 +97,10 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ABB.Robotics.Controllers.PC">
-      <HintPath>bin\x64\Debug\ABB.Robotics.Controllers.PC.dll</HintPath>
-    </Reference>
-    <Reference Include="LeapCSharp.NET4.5">
-      <HintPath>bin\x64\Debug\LeapCSharp.NET4.5.dll</HintPath>
+    <Reference Include="ABB.Robotics.Controllers.PC, Version=21.1.9443.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\ABB\RobotStudio 2021\Bin\ABB.Robotics.Controllers.PC.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

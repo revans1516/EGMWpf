@@ -170,5 +170,31 @@ namespace EGMWpf
 				OnPropertyChanged(nameof(VRControllerRotation2));
 			}
 		}
+		private EGMQuaternionPose _RobotOneQuaternionPose;
+		public EGMQuaternionPose RobotOneQuaternionPose
+        {
+            get
+            {
+				return _RobotOneQuaternionPose;
+            }
+            set
+            {
+				_RobotOneQuaternionPose = value;
+				OnPropertyChanged(nameof(RobotOneQuaternionPose));
+			}
+        }
+		private EGMQuaternionPose _RobotTwoQuaternionPose;
+		public EGMQuaternionPose RobotTwoQuaternionPose
+		{
+			get
+			{
+				return _RobotTwoQuaternionPose;
+			}
+			set
+			{
+				_RobotTwoQuaternionPose = value;
+				OnPropertyChanged(nameof(RobotTwoQuaternionPose));
+			}
+		}
 	}
 }

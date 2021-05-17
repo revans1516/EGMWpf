@@ -20,33 +20,140 @@
             <GroupBox Header="Robot Information" Grid.Row="0" Grid.Column="0" BorderBrush="Black">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="7*"/>
-                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Grid.Column="0" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Label Content="Selected Robot:" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <ComboBox x:Name="cboFoundControllers" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding FoundControllers}" SelectionChanged="CboFoundControllers_SelectionChanged"/>
-                        <Label Content="Connection State: " Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                        <Label Content="{Binding RobotConnected}" Grid.Row="1" Grid.Column="1" Background="{Binding RobotConnectionBrush }"  HorizontalAlignment="Center" FlowDirection="RightToLeft" VerticalAlignment="Center"/>
-                        <Label Content="Operation Mode: " Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                        <Label Content="{Binding RobotOperatingMode}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        <Label Content="Controller State: " Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                        <Label Content="{Binding RobotControllerState}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    </Grid>
+                    <GroupBox Header="Robot Connection Information" Grid.Row="0" Grid.Column="0">
+                        <Grid Grid.Row="0" Grid.Column="0" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Label Content="Selected Robot:" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="cboFoundControllers" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding FoundControllers}" SelectionChanged="CboFoundControllers_SelectionChanged"/>
+                            <Label Content="Connection State: " Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <Label Content="{Binding RobotConnected}" Grid.Row="1" Grid.Column="1" Background="{Binding RobotConnectionBrush }"  HorizontalAlignment="Center" FlowDirection="RightToLeft" VerticalAlignment="Center"/>
+                            <Label Content="Operation Mode: " Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <Label Content="{Binding RobotOperatingMode}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Label Content="Controller State: " Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <Label Content="{Binding RobotControllerState}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Robot Position Information" Grid.Row="1" Grid.Column="0" BorderBrush="Black">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <GroupBox Grid.Column="0" Header="Robot 1">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Row="0" Grid.Column="0" Content="X: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <Label Grid.Row="0" Grid.Column="1" Content="{Binding RobotOneQuaternionPose.Position.X}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+
+                                    <Label Grid.Row="1" Grid.Column="0"  Content="Y: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <Label Grid.Row="1" Grid.Column="1"  Content="{Binding RobotOneQuaternionPose.Position.Y}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
+
+
+                                    <Label Grid.Row="2" Grid.Column="0"  Content="Z: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <Label Grid.Row="2" Grid.Column="1" Content="{Binding RobotOneQuaternionPose.Position.Z}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
+
+                                    <Grid Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" Grid.ColumnSpan="2">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width=".2*"/>
+                                            <ColumnDefinition Width=".8"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Row="0" Grid.Column="0" Content="RW: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="0" Grid.Column="1" Content="{Binding RobotOneQuaternionPose.Rotation.V0}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                        <Label Grid.Row="1" Grid.Column="0" Content="RX: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="1" Grid.Column="1" Content="{Binding RobotOneQuaternionPose.Rotation.V1}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                        <Label Grid.Row="2" Grid.Column="0"  Content="RY: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="2" Grid.Column="1"  Content="{Binding RobotOneQuaternionPose.Rotation.V2}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
+                                        <Label Grid.Row="3" Grid.Column="0" Content="RZ: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="3" Grid.Column="1" Content="{Binding RobotOneQuaternionPose.Rotation.V3}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
+                                    </Grid>
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox Grid.Column="1" Header="Robot 2">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Row="0" Grid.Column="0" Content="X: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <Label Grid.Row="0" Grid.Column="1" Content="{Binding RobotTwoQuaternionPose.Position.X}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+
+                                    <Label Grid.Row="1" Grid.Column="0"  Content="Y: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <Label Grid.Row="1" Grid.Column="1"  Content="{Binding RobotTwoQuaternionPose.Position.Y}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
+
+
+                                    <Label Grid.Row="2" Grid.Column="0"  Content="Z: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <Label Grid.Row="2" Grid.Column="1" Content="{Binding RobotTwoQuaternionPose.Position.Z}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
+
+                                    <Grid Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" Grid.ColumnSpan="2">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width=".2*"/>
+                                            <ColumnDefinition Width=".8"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Row="0" Grid.Column="0" Content="RW: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="0" Grid.Column="1" Content="{Binding RobotTwoQuaternionPose.Rotation.V0}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                        <Label Grid.Row="1" Grid.Column="0" Content="RX: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="1" Grid.Column="1" Content="{Binding RobotTwoQuaternionPose.Rotation.V1}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                        <Label Grid.Row="2" Grid.Column="0"  Content="RY: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="2" Grid.Column="1"  Content="{Binding RobotTwoQuaternionPose.Rotation.V2}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
+                                        <Label Grid.Row="3" Grid.Column="0" Content="RZ: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="3" Grid.Column="1" Content="{Binding RobotTwoQuaternionPose.Rotation.V3}" HorizontalAlignment="Left" VerticalAlignment="Center"  HorizontalContentAlignment="Left"/>
+                                    </Grid>
+                                </Grid>
+                            </GroupBox>
+
+                        </Grid>
+
+
+                    </GroupBox>
 
                 </Grid>
             </GroupBox>
@@ -70,6 +177,7 @@
                         <Label Content="Headset Connection Error:" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         <Label Content="{Binding VRInitializeError}" Grid.Row="0" Grid.Column="1" Background="{Binding VRConnectionBrush }"  HorizontalAlignment="Center" FlowDirection="RightToLeft" VerticalAlignment="Center"/>
                         <Button x:Name="btnStartStreaming" Content="Start Streaming" Grid.Column="2" Grid.Row="0" Margin="5" Click="btnStartStreaming_Click"/>
+                        <Button x:Name="btnRetryConnection" Content="Retry Connection" Grid.Column="2" Grid.Row="0" Margin="5" Click="btnRetryVRConnection_Click" Visibility="Hidden"/>
                         <GroupBox Header="VR Controller Information" Grid.Row="1" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black">
                             <Grid>
                                 <Grid.RowDefinitions>
