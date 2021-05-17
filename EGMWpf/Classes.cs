@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +18,10 @@ namespace EGMWpf
             Y = y;
             Z = z;
         }
+        public Vector3 ToVector3()
+		{
+            return new Vector3((float)X, (float)Y, (float)Z);
+		}
     }
     public class EGMVector4
     {
@@ -58,8 +63,8 @@ namespace EGMWpf
         }
         public EGMQuaternionPose(double x, double y, double z, double rw, double rx, double ry, double rz)
         {
-            Position = new EGMVector3(x, y, z);
-            Rotation = new EGMVector4(rw, rx, ry, rz);
+            Position = new EGMVector3(x,y,z);
+            Rotation = new EGMVector4(rw,rx,ry, rz);
         }
     }
 }
