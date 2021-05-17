@@ -96,6 +96,12 @@ namespace EGMWpf
             //Gets the initial state for the VR controllers. This is used to zero out the coordinate system
             OpenVRConnection.GetControllerStateWithPose(ETrackingUniverseOrigin.TrackingUniverseStanding, ControllerLIndex, ref BeginState, BeginState.unPacketNum, ref StartPingPose);
             OpenVRConnection.GetControllerStateWithPose(ETrackingUniverseOrigin.TrackingUniverseStanding, ControllerRIndex, ref BeginState2, BeginState.unPacketNum, ref StartPongPose);
+            //ulong VideoHandle=0;
+            //var FrontCamera = OpenVR.TrackedCamera;
+            //FrontCamera.AcquireVideoStreamingService(0, ref VideoHandle);
+            //EVRSettingsError e = EVRSettingsError.None;
+            //OpenVR.Settings.SetBool(OpenVR.k_pch_Camera_Section, OpenVR.k_pch_Camera_EnableCameraForCollisionBounds_Bool, true,ref e );
+            
             Vector3 StartPingVec = new Vector3(StartPingPose.mDeviceToAbsoluteTracking.m3, StartPingPose.mDeviceToAbsoluteTracking.m7, StartPingPose.mDeviceToAbsoluteTracking.m11);
             //Rotates the inital position to match the coordinate system of the robots
             StartPingVec = Vector3.Transform(StartPingVec, new Quaternion(.707106f, 0, 0, .707106f));
@@ -215,6 +221,7 @@ namespace EGMWpf
                         
                         if (RightControllerState.rAxis2.x >= .9f)
                         {
+                            
                             Vector3 rotation = QuatToEuler(PongQuat);
                             EGMPongCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Euler;
                             EGMPongCom.SetEularPose((LContPose.mDeviceToAbsoluteTracking.m3 - StartPongPose.mDeviceToAbsoluteTracking.m3) * 1000,
@@ -266,7 +273,7 @@ namespace EGMWpf
             radAngles.Y = -(float)Math.Atan2(2 * (q0 * q1 + q2 * q3), 1 - 2 * (Math.Pow(q1, 2) + Math.Pow(q2, 2))) * 57.2958f;
             radAngles.X = -(float)Math.Asin(2 * (q0 * q2 - q3 * q1)) * 57.2958f;
             radAngles.Z = (float)Math.Atan2(2 * (q0 * q3 + q1 * q2), 1 - 2 * (Math.Pow(q2, 2) + Math.Pow(q3, 2))) * 57.2958f;
-
+            
             return radAngles;
         }
         private void Window_Closed(object sender, EventArgs e)
