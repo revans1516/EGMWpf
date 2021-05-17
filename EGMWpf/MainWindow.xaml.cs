@@ -42,6 +42,7 @@ namespace EGMWpf
         Controller ActiveController;
         BoundProperties BoundProperties = new BoundProperties();
         bool updateRobotPosition = false;
+        bool streamVRData = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -163,11 +164,14 @@ namespace EGMWpf
                     PongGrip.Reset();
                 }
 
-
+                double[] PingControllerPosition = EGMPingCom.CurrentPose;
+                double[] PongControllerPosition = EGMPongCom.CurrentPose;
+                BoundProperties.RobotOneQuaternionPose = new EGMQuaternionPose(PingControllerPosition[0], PingControllerPosition[1], PingControllerPosition[2], PingControllerPosition[3], PingControllerPosition[4], PingControllerPosition[5], PingControllerPosition[6]);
+                BoundProperties.RobotTwoQuaternionPose = new EGMQuaternionPose(PongControllerPosition[0], PongControllerPosition[1], PongControllerPosition[2], PongControllerPosition[3], PongControllerPosition[4], PongControllerPosition[5], PongControllerPosition[6]);
                 switch (EGMPingCom.Move_Type)
                 {
                     case EGM_6_10.UDPUC_RW6_10.MotionType.Euler:
-                        double[] currentPos;
+                        
                         if (LeftControllerState.rAxis2.x >= .9f)
                         {
                             Vector3 rotation = QuatToEuler(PingQuat);
@@ -180,30 +184,36 @@ namespace EGMWpf
                         }
                         else
                         {
-                            currentPos = EGMPingCom.CurrentPose;
+                            
                             EGMPingCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Quaternion;
-                            EGMPingCom.SetOrientPose(currentPos[0], currentPos[1], currentPos[2], currentPos[3], currentPos[4], currentPos[5], currentPos[6]);
+                            EGMPingCom.SetOrientPose(PingControllerPosition[0], PingControllerPosition[1], PingControllerPosition[2], PingControllerPosition[3], PingControllerPosition[4], PingControllerPosition[5], PingControllerPosition[6]);
                             
                         }
                         break;
                     case EGM_6_10.UDPUC_RW6_10.MotionType.Quaternion:
-                        EGMPingCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Quaternion;
-                        EGMPingCom.SetOrientPose((PingContPos.X - StartPingVec.X) * 1000, (PingContPos.Y - StartPingVec.Y) * 1000, (PingContPos.Z - StartPingVec.Z) * 1000,
-                        PingQuat.W, PingQuat.X, PingQuat.Y, PingQuat.Z);
-                        
-
+                        if (LeftControllerState.rAxis2.x >= .9f)
+                        {
+                            EGMPingCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Quaternion;
+                            EGMPingCom.SetOrientPose((PingContPos.X - StartPingVec.X) * 1000, (PingContPos.Y - StartPingVec.Y) * 1000, (PingContPos.Z - StartPingVec.Z) * 1000,
+                            PingQuat.W, PingQuat.X, PingQuat.Y, PingQuat.Z);
+                        }
+                        else
+                        {
+                            EGMPingCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Quaternion;
+                            EGMPingCom.SetOrientPose(PingControllerPosition[0], PingControllerPosition[1], PingControllerPosition[2], PingControllerPosition[3], PingControllerPosition[4], PingControllerPosition[5], PingControllerPosition[6]);
+                        }
                         break;
                     case EGM_6_10.UDPUC_RW6_10.MotionType.Joint:
                         throw new NotImplementedException("I don't feel like having you break the robot, too bad so sad cry me a river");
                 }
-
-
+                
+                
 
                 switch (EGMPongCom.Move_Type)
                 {
                     case EGM_6_10.UDPUC_RW6_10.MotionType.Euler:
-                        double[] currentPos;
-                        if (LeftControllerState.rAxis2.x >= .9f)
+                        
+                        if (RightControllerState.rAxis2.x >= .9f)
                         {
                             Vector3 rotation = QuatToEuler(PongQuat);
                             EGMPongCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Euler;
@@ -215,27 +225,33 @@ namespace EGMWpf
                         }
                         else
                         {
-                            currentPos = EGMPongCom.CurrentPose;
+                            
                             EGMPongCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Quaternion;
-                            EGMPongCom.SetOrientPose(currentPos[0], currentPos[1], currentPos[2], currentPos[3], currentPos[4], currentPos[5], currentPos[6]);
+                            EGMPongCom.SetOrientPose(PongControllerPosition[0], PongControllerPosition[1], PongControllerPosition[2], PongControllerPosition[3], PongControllerPosition[4], PongControllerPosition[5], PongControllerPosition[6]);
 
 
                         }
                         break;
                     case EGM_6_10.UDPUC_RW6_10.MotionType.Quaternion:
-
-                        EGMPongCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Quaternion;
-                        EGMPongCom.SetOrientPose((PongContPos.X - StartPongVec.X) * 1000, (PongContPos.Y - StartPongVec.Y) * 1000, (PongContPos.Z - StartPongVec.Z) * 1000,
-                        PongQuat.W, PongQuat.X, PongQuat.Y, PongQuat.Z);
-
+                        if (RightControllerState.rAxis2.x >= .9f)
+                        {
+                            EGMPongCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Quaternion;
+                            EGMPongCom.SetOrientPose((PongContPos.X - StartPongVec.X) * 1000, (PongContPos.Y - StartPongVec.Y) * 1000, (PongContPos.Z - StartPongVec.Z) * 1000,
+                            PongQuat.W, PongQuat.X, PongQuat.Y, PongQuat.Z);
+                        }
+                        else
+                        {
+                            EGMPongCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Quaternion;
+                            EGMPongCom.SetOrientPose(PongControllerPosition[0], PongControllerPosition[1], PongControllerPosition[2], PongControllerPosition[3], PongControllerPosition[4], PongControllerPosition[5], PongControllerPosition[6]);
+                        }
 
                         break;
                     case EGM_6_10.UDPUC_RW6_10.MotionType.Joint:
                         throw new NotImplementedException("I don't feel like having you break the robot, too bad so sad cry me a river");
                 }
-                //}
+                
 
-            } while (true);
+            } while (streamVRData);
         }
 
         public Vector3 QuatToEuler(Quaternion q)
@@ -270,11 +286,11 @@ namespace EGMWpf
                 VRStreamingThread.Abort();
             }
 
-            if (RobotPositionThread != null)
-            {
-                updateRobotPosition = false;
-                RobotPositionThread.Abort();
-            }
+            //if (RobotPositionThread != null)
+            //{
+            //    updateRobotPosition = false;
+            //    RobotPositionThread.Abort();
+            //}
             OpenVR.Shutdown();
             Thread.Sleep(1000);
         }
@@ -288,9 +304,13 @@ namespace EGMWpf
             BoundProperties.RobotOperatingMode = ActiveController.OperatingMode;
             ActiveController.StateChanged += ActiveController_StateChanged;
             BoundProperties.RobotControllerState = ActiveController.State;
-            updateRobotPosition = true;
-            RobotPositionThread = new Thread(RobotPositionUpdater);
-            RobotPositionThread.Start();
+            RobTarget RobotOnePosition = ActiveController.MotionSystem.MechanicalUnits[0].GetPosition(ABB.Robotics.Controllers.MotionDomain.CoordinateSystemType.World);
+            BoundProperties.RobotOneQuaternionPose = new EGMQuaternionPose(RobotOnePosition.Trans.X, RobotOnePosition.Trans.Y, RobotOnePosition.Trans.Z, RobotOnePosition.Rot.Q1, RobotOnePosition.Rot.Q2, RobotOnePosition.Rot.Q3, RobotOnePosition.Rot.Q4);
+            RobTarget RobotTwoPosition = ActiveController.MotionSystem.MechanicalUnits[1].GetPosition(ABB.Robotics.Controllers.MotionDomain.CoordinateSystemType.World);
+            BoundProperties.RobotTwoQuaternionPose = new EGMQuaternionPose(RobotTwoPosition.Trans.X, RobotTwoPosition.Trans.Y, RobotTwoPosition.Trans.Z, RobotTwoPosition.Rot.Q1, RobotTwoPosition.Rot.Q2, RobotTwoPosition.Rot.Q3, RobotTwoPosition.Rot.Q4);
+            //updateRobotPosition = true;
+            //RobotPositionThread = new Thread(RobotPositionUpdater);
+            //RobotPositionThread.Start();
             try
             {
                 PingGrip = (ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal)ActiveController.IOSystem.GetSignal("PING_VALVE_1");
@@ -302,16 +322,16 @@ namespace EGMWpf
             }
 
         }
-        private void RobotPositionUpdater()
-        {
-            do
-            {
-                RobTarget RobotOnePosition = ActiveController.MotionSystem.MechanicalUnits[0].GetPosition(ABB.Robotics.Controllers.MotionDomain.CoordinateSystemType.World);
-                BoundProperties.RobotOneQuaternionPose = new EGMQuaternionPose(RobotOnePosition.Trans.X, RobotOnePosition.Trans.Y, RobotOnePosition.Trans.Z, RobotOnePosition.Rot.Q1, RobotOnePosition.Rot.Q2, RobotOnePosition.Rot.Q3, RobotOnePosition.Rot.Q4);
-                RobTarget RobotTwoPosition = ActiveController.MotionSystem.MechanicalUnits[1].GetPosition(ABB.Robotics.Controllers.MotionDomain.CoordinateSystemType.World);
-                BoundProperties.RobotTwoQuaternionPose = new EGMQuaternionPose(RobotTwoPosition.Trans.X, RobotTwoPosition.Trans.Y, RobotTwoPosition.Trans.Z, RobotTwoPosition.Rot.Q1, RobotTwoPosition.Rot.Q2, RobotTwoPosition.Rot.Q3, RobotTwoPosition.Rot.Q4);
-            } while (updateRobotPosition);
-        }
+        //private void RobotPositionUpdater()
+        //{
+        //    do
+        //    {
+        //        RobTarget RobotOnePosition = ActiveController.MotionSystem.MechanicalUnits[0].GetPosition(ABB.Robotics.Controllers.MotionDomain.CoordinateSystemType.World);
+        //        BoundProperties.RobotOneQuaternionPose = new EGMQuaternionPose(RobotOnePosition.Trans.X, RobotOnePosition.Trans.Y, RobotOnePosition.Trans.Z, RobotOnePosition.Rot.Q1, RobotOnePosition.Rot.Q2, RobotOnePosition.Rot.Q3, RobotOnePosition.Rot.Q4);
+        //        RobTarget RobotTwoPosition = ActiveController.MotionSystem.MechanicalUnits[1].GetPosition(ABB.Robotics.Controllers.MotionDomain.CoordinateSystemType.World);
+        //        BoundProperties.RobotTwoQuaternionPose = new EGMQuaternionPose(RobotTwoPosition.Trans.X, RobotTwoPosition.Trans.Y, RobotTwoPosition.Trans.Z, RobotTwoPosition.Rot.Q1, RobotTwoPosition.Rot.Q2, RobotTwoPosition.Rot.Q3, RobotTwoPosition.Rot.Q4);
+        //    } while (updateRobotPosition);
+        //}
 
         private void ActiveController_StateChanged(object sender, StateChangedEventArgs e)
         {
@@ -335,8 +355,20 @@ namespace EGMWpf
 
         private void btnStartStreaming_Click(object sender, RoutedEventArgs e)
         {
-            VRStreamingThread = new Thread(VRThread);
-            VRStreamingThread.Start();
+            if(VRStreamingThread.IsAlive == false)
+            {
+                streamVRData = true;
+                VRStreamingThread = new Thread(VRThread);
+                VRStreamingThread.Start();
+                btnStartStreaming.Content = "Stop Streaming";
+            }
+            else
+            {
+                streamVRData = false;
+                VRStreamingThread.Abort();
+                btnStartStreaming.Content = "Start Streaming";
+            }
+            
         }
     }
 
