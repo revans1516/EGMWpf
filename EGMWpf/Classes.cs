@@ -18,10 +18,19 @@ namespace EGMWpf
             Y = y;
             Z = z;
         }
+
+        public EGMVector3(Vector3 Vec)
+        {
+            X = Vec.X;
+            Y = Vec.Y;
+            Z = Vec.Z;
+        }
+
         public Vector3 ToVector3()
 		{
             return new Vector3((float)X, (float)Y, (float)Z);
 		}
+
     }
     public class EGMVector4
     {
