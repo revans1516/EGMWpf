@@ -31,7 +31,7 @@ namespace EGMWpf
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		
+
 		Thread VRStreamingThread;
 		Thread IOControlThread;
 		Thread RobotPositionThread;
@@ -50,11 +50,11 @@ namespace EGMWpf
 		BoundProperties BoundProperties = new BoundProperties();
 		bool updateRobotPosition = false;
 		bool streamVRData = false;
+		bool runIOControl = false;
 		public MainWindow()
 		{
 			InitializeComponent();
-			//StartPolhemus();
-			//return;
+
 			//Finds all controllers on network, specifically looks for Virtual Controllers on computer as well
 			NetworkScanner scanner = new NetworkScanner();
 			NetworkScanner.AddRemoteController("127.0.0.1");
@@ -92,8 +92,8 @@ namespace EGMWpf
 		public void VRThread()
 		{
 
-			Quaternion PingQuat=new Quaternion();
-			Quaternion PongQuat= new Quaternion();
+			Quaternion PingQuat = new Quaternion();
+			Quaternion PongQuat = new Quaternion();
 			Matrix4x4 PingMatrix;
 			Matrix4x4 PongMatrix;
 			VRControllerState_t LeftControllerState = new VRControllerState_t();
@@ -121,13 +121,16 @@ namespace EGMWpf
 			StartPingVec = Vector3.Transform(StartPingVec, new Quaternion(0, 0, .707106f, .707106f));
 
 			Vector3 StartPongVec = new Vector3(RContPose.mDeviceToAbsoluteTracking.m3, RContPose.mDeviceToAbsoluteTracking.m7, RContPose.mDeviceToAbsoluteTracking.m11);
+			Console.WriteLine("Initial ping vector: " + StartPingVec.ToString());
+			
 			StartPongVec = Vector3.Transform(StartPongVec, new Quaternion(.707106f, 0, 0, .707106f));
 			StartPongVec = Vector3.Transform(StartPongVec, new Quaternion(0, 0, .707106f, .707106f));
+			Console.WriteLine("Initial pong vector: " + StartPongVec.ToString());
 			EGMVector3 PingRot = new EGMVector3(QuatToEuler(PingQuat));
 			EGMVector3 PingContPos = new EGMVector3(0, 0, 0);
 
 			EGMVector3 PongRot = new EGMVector3(QuatToEuler(PongQuat));
-			EGMVector3 PongContPos = new EGMVector3(0,0,0);
+			EGMVector3 PongContPos = new EGMVector3(0, 0, 0);
 
 			BoundProperties.VRControllerPosition = PingContPos;
 			BoundProperties.VRControllerRotation = PingRot;
@@ -138,7 +141,7 @@ namespace EGMWpf
 			do
 			{
 
-				
+
 				//Gets the current states of the controllers. This includes their positions
 				OpenVRConnection.GetControllerStateWithPose(ETrackingUniverseOrigin.TrackingUniverseStanding, ControllerLIndex, ref LeftControllerState, (uint)Marshal.SizeOf(typeof(VRControllerState_t)), ref LContPose);
 				OpenVRConnection.GetControllerStateWithPose(ETrackingUniverseOrigin.TrackingUniverseStanding, ControllerRIndex, ref RightControllerState, (uint)Marshal.SizeOf(typeof(VRControllerState_t)), ref RContPose);
@@ -154,11 +157,9 @@ namespace EGMWpf
 				PingQuat = Quaternion.CreateFromRotationMatrix(PingMatrix);
 				PingContPos = new EGMVector3(PingMatrix.M41, PingMatrix.M42, PingMatrix.M43);
 				PingRot = new EGMVector3(QuatToEuler(PingQuat));
-				//BoundProperties.VRControllerPosition = PingContPos;
-				//BoundProperties.VRControllerRotation = PingRot;
-
-
-
+				BoundProperties.VRControllerPosition = PingContPos;
+				BoundProperties.VRControllerRotation = PingRot;
+				
 				//Constructs a matrix from the controller state
 				PongMatrix = new System.Numerics.Matrix4x4(
 					RContPose.mDeviceToAbsoluteTracking.m0, RContPose.mDeviceToAbsoluteTracking.m4, RContPose.mDeviceToAbsoluteTracking.m8, 0,
@@ -171,13 +172,8 @@ namespace EGMWpf
 				PongQuat = Quaternion.CreateFromRotationMatrix(PongMatrix);
 				PongContPos = new EGMVector3(PongMatrix.M41, PongMatrix.M42, PongMatrix.M43);
 				PongRot = new EGMVector3(QuatToEuler(PongQuat));
-				//BoundProperties.VRControllerPosition2 = PongContPos;
-				//BoundProperties.VRControllerRotation2 = PongRot;
-
-
-
-
-
+				BoundProperties.VRControllerPosition2 = PongContPos;
+				BoundProperties.VRControllerRotation2 = PongRot;
 
 				double[] PingControllerPosition = EGMPingCom.CurrentPose;
 				double[] PongControllerPosition = EGMPongCom.CurrentPose;
@@ -198,7 +194,7 @@ namespace EGMWpf
 						}
 						else
 						{
-							StartPingVec = new Vector3(LContPose.mDeviceToAbsoluteTracking.m3, LContPose.mDeviceToAbsoluteTracking.m7, LContPose.mDeviceToAbsoluteTracking.m11);
+							//StartPingVec = new Vector3(LContPose.mDeviceToAbsoluteTracking.m3, LContPose.mDeviceToAbsoluteTracking.m7, LContPose.mDeviceToAbsoluteTracking.m11);
 							EGMPingCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Quaternion;
 							EGMPingCom.SetOrientPose(PingControllerPosition[0], PingControllerPosition[1], PingControllerPosition[2], PingControllerPosition[3], PingControllerPosition[4], PingControllerPosition[5], PingControllerPosition[6]);
 
@@ -213,7 +209,7 @@ namespace EGMWpf
 						}
 						else
 						{
-							StartPingVec = new Vector3(LContPose.mDeviceToAbsoluteTracking.m3, LContPose.mDeviceToAbsoluteTracking.m7, LContPose.mDeviceToAbsoluteTracking.m11);
+							//StartPingVec = new Vector3(LContPose.mDeviceToAbsoluteTracking.m3, LContPose.mDeviceToAbsoluteTracking.m7, LContPose.mDeviceToAbsoluteTracking.m11);
 							EGMPingCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Quaternion;
 							EGMPingCom.SetOrientPose(PingControllerPosition[0], PingControllerPosition[1], PingControllerPosition[2], PingControllerPosition[3], PingControllerPosition[4], PingControllerPosition[5], PingControllerPosition[6]);
 						}
@@ -230,8 +226,6 @@ namespace EGMWpf
 
 						if (RightControllerState.rAxis2.x >= .9f)
 						{
-
-							Vector3 rotation = QuatToEuler(PongQuat);
 							EGMPongCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Euler;
 							EGMPongCom.SetEularPose((PongContPos.X - StartPongVec.X) * 1000,
 						(PongContPos.Y - StartPongVec.Y) * 1000,
@@ -241,7 +235,7 @@ namespace EGMWpf
 						}
 						else
 						{
-							StartPongVec = new Vector3(RContPose.mDeviceToAbsoluteTracking.m3, RContPose.mDeviceToAbsoluteTracking.m7, RContPose.mDeviceToAbsoluteTracking.m11);
+							//StartPongVec = new Vector3(RContPose.mDeviceToAbsoluteTracking.m3, RContPose.mDeviceToAbsoluteTracking.m7, RContPose.mDeviceToAbsoluteTracking.m11);
 							EGMPongCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Quaternion;
 							EGMPongCom.SetOrientPose(PongControllerPosition[0], PongControllerPosition[1], PongControllerPosition[2], PongControllerPosition[3], PongControllerPosition[4], PongControllerPosition[5], PongControllerPosition[6]);
 
@@ -257,7 +251,7 @@ namespace EGMWpf
 						}
 						else
 						{
-							StartPongVec = new Vector3(RContPose.mDeviceToAbsoluteTracking.m3, RContPose.mDeviceToAbsoluteTracking.m7, RContPose.mDeviceToAbsoluteTracking.m11);
+							//StartPongVec = new Vector3(RContPose.mDeviceToAbsoluteTracking.m3, RContPose.mDeviceToAbsoluteTracking.m7, RContPose.mDeviceToAbsoluteTracking.m11);
 							EGMPongCom.Move_Type = EGM_6_10.UDPUC_RW6_10.MotionType.Quaternion;
 							EGMPongCom.SetOrientPose(PongControllerPosition[0], PongControllerPosition[1], PongControllerPosition[2], PongControllerPosition[3], PongControllerPosition[4], PongControllerPosition[5], PongControllerPosition[6]);
 						}
@@ -266,8 +260,17 @@ namespace EGMWpf
 					case EGM_6_10.UDPUC_RW6_10.MotionType.Joint:
 						throw new NotImplementedException("I don't feel like having you break the robot, too bad so sad cry me a river");
 				}
-
-
+				//The ULButtonPressed field lets us know which buttons are pressed, by adding values all up. 2 is the top button, 128 is the bottom button, 130 is both at once. This will not work if other buttons/triggers are pressed
+				if (LeftControllerState.ulButtonPressed == 2 || LeftControllerState.ulButtonPressed == 128 || LeftControllerState.ulButtonPressed == 130)
+				{
+					StartPingVec = new Vector3((float)PingContPos.X, (float)PingContPos.Y, (float)PingContPos.Z);
+					Console.WriteLine("Reset Ping Start: " + StartPingVec.ToString());
+				}
+				if (RightControllerState.ulButtonPressed == 2 || RightControllerState.ulButtonPressed == 128 || LeftControllerState.ulButtonPressed == 130)
+				{
+					StartPongVec = new Vector3((float)PongContPos.X, (float)PongContPos.Y, (float)PongContPos.Z);
+					Console.WriteLine("Reset Pong Start: " + StartPongVec.ToString());
+				}
 			} while (streamVRData);
 		}
 
@@ -297,12 +300,16 @@ namespace EGMWpf
 			{
 				EGMPongCom.Stop();
 			}
-
+			if (IOControlThread != null && IOControlThread.IsAlive)
+			{
+				runIOControl = false;
+				IOControlThread.Join();
+			}
 			if (VRStreamingThread != null && VRStreamingThread.IsAlive)
 			{
 				streamVRData = false;
 				VRStreamingThread.Join();
-				VRStreamingThread.Abort();
+
 			}
 
 			//if (RobotPositionThread != null)
@@ -343,10 +350,11 @@ namespace EGMWpf
 			{
 				Console.WriteLine(errmsg.Message);
 			}
+			runIOControl = true;
 			IOControlThread = new Thread(IOControl);
 			IOControlThread.Start();
 		}
-		
+
 		private void IOControl()
 		{
 			do
@@ -358,6 +366,8 @@ namespace EGMWpf
 				//OpenVRConnection.GetControllerStateWithPose(ETrackingUniverseOrigin.TrackingUniverseStanding, ControllerLIndex, ref LeftControllerState, (uint)Marshal.SizeOf(typeof(VRControllerState_t)), ref LContPose);
 				//OpenVRConnection.GetControllerStateWithPose(ETrackingUniverseOrigin.TrackingUniverseStanding, ControllerRIndex, ref RightControllerState, (uint)Marshal.SizeOf(typeof(VRControllerState_t)), ref RContPose);
 				//Triggering the grippers on the robots if the trigger on the controller is held
+
+
 				if (LeftControllerState.rAxis1.x < .5)
 				{
 					PingGripOpen.Reset();
@@ -381,14 +391,14 @@ namespace EGMWpf
 					PongGripOpen.Set();
 
 				}
-			} while (true);
+			} while (runIOControl);
 
 		}
 		private void StartPolhemus()
 		{
 			PlStream plStream = new PlStream(PlTracker.Liberty);
 			plStream.StartReading();
-			
+
 		}
 		private void ActiveController_StateChanged(object sender, StateChangedEventArgs e)
 		{
