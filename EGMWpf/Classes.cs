@@ -76,4 +76,11 @@ namespace EGMWpf
             Rotation = new EGMVector4(rw,rx,ry, rz);
         }
     }
+    public static class Extensions
+	{
+        public static EGMVector3 ToVector3(this Vector3 vector)
+		{
+            return new EGMVector3(vector);
+		}
+	}
 }
